@@ -25,7 +25,9 @@ public class AppealsDao extends JdbcDaoSupport{
 	}
 	public List<AppealsDto> getAllAppealsDtos(){
 		String sql = "select * from appealsdto";
+		System.out.println("test");
 		return this.getJdbcTemplate().query(sql, new AppealsMapper());
+		
 	}
 	public void deleteAppealsDtoForId(String claimId){
 		String sql = "delete from appealsdto where claimId = ?";
