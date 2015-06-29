@@ -38,6 +38,15 @@ public class ProviderDao extends JdbcDaoSupport {
 		String sql = "select * from facility";
 		return this.getJdbcTemplate().query(sql, new FacilityMapper());
 	}
+	public void deleteFacility(long id){
+		String sql = "delete from facility where id = ?";
+		this.getJdbcTemplate().update(sql, new Object[]{id});
+	}
+	public void updateFacility(Facility fac){
+		String sql = "update facility set facilityname=?, street=?, town=?, state=?, zip=?, phone=?, npi=?, taxid=?, fax=? where id=?";
+		this.getJdbcTemplate().update(sql, new Object[]{fac.getFacilityName(), fac.getStreet(), fac.getTown(), fac.getState(),
+							fac.getZip(),fac.getPhone(), fac.getNpi(), fac.getTaxId(), fac.getFax(), fac.getId()});
+	}
 	public void insertDoctor(DoctorDto doctor){
 		String sql = "insert into doctor (name, npi) values (?,?)";
 		this.getJdbcTemplate().update(sql, new Object[]{doctor.getName(), doctor.getNpi()});

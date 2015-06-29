@@ -26,6 +26,15 @@ public class InsuranceDao extends JdbcDaoSupport {
 		String sql = "select * from insurance where id = ?";
 		return this.getJdbcTemplate().queryForObject(sql, new Object[]{id}, new InsuranceMapper());
 	}
+	public void deleteInsurance(long id){
+		String sql = "delete from insurance where id = ? ";
+		this.getJdbcTemplate().update(sql, new Object[]{id});
+	}
+	public void updateInsurance(Insurance ins){
+		String sql = "update insurance set name=?, dept=?, street=?, town=?, state=?, zip=? phone=? where id=?";
+		this.getJdbcTemplate().update(sql, new Object[]{ins.getName(), ins.getDept(), ins.getStreet(), ins.getTown(),
+				ins.getState(), ins.getPhone(), ins.getId()});
+	}
 	private final static class InsuranceMapper implements RowMapper<Insurance> {
 
 		public Insurance mapRow(ResultSet rs, int rowNum) throws SQLException {

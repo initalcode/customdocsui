@@ -25,7 +25,7 @@ public class AppealsDao extends JdbcDaoSupport{
 	}
 	public List<AppealsDto> getAllAppealsDtos(){
 		String sql = "select * from appealsdto";
-		System.out.println("test");
+		System.out.println("te st");
 		return this.getJdbcTemplate().query(sql, new AppealsMapper());
 		
 	}

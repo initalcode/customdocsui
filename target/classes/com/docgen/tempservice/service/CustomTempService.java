@@ -111,6 +111,16 @@ public class CustomTempService {
 	public List<Insurance> allInsurances(){
 		return insuranceDao.getAllInsurances();
 	}
+	@DELETE
+	@Path("/editinsurance")
+	public void removeInsurance(@QueryParam("id") long id){
+		insuranceDao.deleteInsurance(id);
+	}
+	@POST
+	@Path("/editinsurance")
+	public void editInsurance(Insurance ins){
+		insuranceDao.updateInsurance(ins);
+	}
 	@POST
 	@Path("/doctor")
 	public void addDoctor(DoctorDto doctor){
@@ -146,6 +156,16 @@ public class CustomTempService {
 	@Path("/getfacility")
 	public Facility getOneFacility(@QueryParam("id") long id){
 		return providerDao.getFacilityForId(id);
+	}
+	@DELETE
+	@Path("/editfacility")
+	public void removeFacility(@QueryParam("id") long id){
+		providerDao.deleteFacility(id);
+	}
+	@POST
+	@Path("/editfacility")
+	public void editFacility(Facility fac){
+		providerDao.updateFacility(fac);
 	}
 	@GET
 	@Path("/facility")
