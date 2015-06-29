@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <style type="text/css">
+            .bodyBody {
+                margin: 10px;
+                font-size: 1.50em;
+            }
+            .facilityHeader{
+                text-align: center;
+            }
+            .divHeader {
+                text-align: right;
+                border: 1px solid;
+            }
+            .divInsuranceInfo {
+                text-align: left;
+                float: left;
+                width: 1288px;
+
+            }
+            .newDate {
+                float: left;
+                text-align: left;
+                width: 1288px;
+            }
+            .divSubject {
+                clear: both;
+                font-weight: bold;
+                padding-top: 80px;
+            }
+            .referenceInfo{
+                float: left;
+                text-align: left;
+            }
+            .divAdios {
+                float: left;
+                padding-top: 50px;
+            }
+        </style>
+        <title>Appeal Letter</title>
+    </head>
+    <body class="bodyBody">
+        <div class="facilityHeader">
+            <h3>${facility.facilityName}</h3> <hr>
+            <h6>${facility.street}, ${facility.town}, ${facility.state} ${facility.zip} <br>
+            Phone: ${facility.phone} Fax: ${facility.fax} </h6>
+        </div>
+        <div class="divInsuranceInfo">
+            ${insurance.name}<br/>
+            ATTN: ${insurance.dept}<br/>
+            ${insurance.street}, ${insurance.state} ${insurance.zip}
+        </div>
+        <div class="newDate">
+        <br/>
+            ${dateCreated?date}
+        </div>
+        <br/>
+        <div class="referenceInfo">
+            Ref: ${patient.name} <br>
+                 ID: ${patient.insId}<br>
+                 DOB: ${patient.dateOfBirth}<br>
+                 DOS: ${dateOfService?date}<br>
+                 ClaimID: ${claimId}<br>
+                 Tax ID: ${facility.taxId}<br>
+                 NPI: ${facility.npi?c}<br>
+        </div>
+        <div class="divSubject">
+            Dear Sir or Madam,
+        </div>
+
+        <div class="divContents">
+            <p>
+                <br>
+                ${parOne}
+            </p>
+            <p>
+                Please find the follwing documents and reprocess the claim.
+                <ul>
+                    <li>Medicaid EOB</li>
+                    <li>Timely filling proof</li>
+                    <li>Other Insurance EOB</li>
+                    <li>Medical Notes as required</li>
+                    <li>Preexisting form</li>
+                    <li>Any other forms</li>
+                </ul>
+           </p>
+            <p>
+                ${parTwo}
+            </p>
+            <br>
+            <p>
+                In case of any questions, you are free to call me at 732-290-1014 or 
+                email me at Binita.patel@kunkunmedicalbilling.com
+            </p>
+        </div>
+
+        <div class="divAdios">
+            Thank You, <br/>
+            
+            <br/>
+            Binita Patel <br/>
+            Billing Manager <br/>
+        </div>
+    </body>
+</html>

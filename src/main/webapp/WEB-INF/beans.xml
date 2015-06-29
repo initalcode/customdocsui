@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/data/jpa
+http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+<!-- 	<bean -->
+<!-- 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> -->
+<!-- 		<property name="location"> -->
+<!-- 			<value>classpath:application.properties</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/kundata" />
+		<property name="username" value="postgres" />
+		<property name="password" value="root" />
+	</bean>
+	<bean id="patientDao" class="com.docgen.tempservice.dao.PatientDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="providerDao" class="com.docgen.tempservice.dao.ProviderDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="insuranceDao" class="com.docgen.tempservice.dao.InsuranceDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="appealsDao" class="com.docgen.tempservice.dao.AppealsDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="appealsDashboardDao" class="com.docgen.tempservice.dao.AppealsDashboardDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+<!-- 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"> -->
+<!--     <property name="templateLoaderPath" value="webapp/WEB-INF/"/> -->
+<!-- 	</bean> -->
+<!-- 	<bean id= "freemarkerTemplate" class ="freemarker.template.Configuration" /> -->
+<!-- 	<import resource="classpath:config/repository-context.xml" /> -->
+<!-- 	<import resource="classpath:config/business-context.xml" /> -->
+
+	<context:component-scan base-package="com.docgen.tempservice" />
+
+	<jpa:repositories base-package="com.docgen.tempservice" />
+
+	<bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+	<bean id="serviceBO"
+		class="com.docgen.tempservice.service.CustomTempService">
+	</bean>
+	
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>com.docgen.tempservice</value>
+			</list>
+		</property>	
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">com.docgen.tempservice.util.JSONBPostgreSQLDialect</prop>
+			</props>
+		</property>
+	</bean>
+	<bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
+	<bean id="persistenceExceptionTranslationPostProcessor"
+		class=
+		"org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+<!-- 	<bean id="sessionFactory" class= "org.springframework.orm.hibernate3.AnnotationSessionFactoryBean"> -->
+<!-- 			<property name="dataSource" ref="dataSource" /> -->
+<!-- 			<property name="packagesToScan"> -->
+<!-- 				<list>  -->
+<!-- 				<value> com.docgen.tempservice.model</value> -->
+<!-- 				</list> -->
+<!-- 			</property> -->
+<!-- 			<property name="hibernateProperties"> -->
+<!-- 				<props> -->
+<!-- 					<prop key="dialect">org.postgresql.Driver</prop> -->
+<!-- 				</props> -->
+<!-- 			</property> -->
+	
+<!-- 	</bean> -->
+	<bean class="com.docgen.tempservice.service.CustomTempService" id="customTempService"></bean>
+	<jaxrs:server id="tempService" address="/service">
+		<jaxrs:serviceBeans>
+			<bean class="com.docgen.tempservice.service.CustomTempService"/>
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+			<entry key="json" value="application/json" />
+		</jaxrs:extensionMappings>
+		<jaxrs:providers>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
+	</jaxrs:server> 
+	
+</beans>
