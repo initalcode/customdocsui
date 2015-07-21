@@ -19,9 +19,20 @@ public class AppealsDao extends JdbcDaoSupport{
 		this.getJdbcTemplate().update(sql, new Object[]{dto.getPatientId(), dto.getDoctorId(), dto.getFacilityId(), dto.getInsuranceId(),
 					dto.getDateOfService(), dto.getClaimId(), dto.getDateCreated(), dto.getParOne(), dto.getParTwo()});
 	}
+	public void updateAppealsDetails(AppealsDto dto){
+		String sql = "update appealsdto set patientId=?, doctorId=?, facilityId=?, insuranceId=?, dateOfService=?, "
+				+ "dateCreated=?, parOne=?, parTwo=? where claimId=?";
+		this.getJdbcTemplate().update(sql, new Object[]{dto.getPatientId(), dto.getDoctorId(), dto.getFacilityId(), dto.getInsuranceId(),
+					dto.getDateOfService(), dto.getDateCreated(), dto.getParOne(), dto.getParTwo(), dto.getClaimId()});
+	}
 	public AppealsDto getAppealsDtoforClaimId(String claimId){
 		String sql = "select * from appealsdto where claimId = ?";
 		return this.getJdbcTemplate().queryForObject(sql, new Object[]{claimId},new AppealsMapper());
+	}
+	public Boolean letterExists(String claimId){
+		String sql = "select count(*) from appealsdto where claimId = ?";
+		Integer x = this.getJdbcTemplate().queryForObject(sql, Integer.class, claimId);
+		return x != null && x > 0; 
 	}
 	public List<AppealsDto> getAllAppealsDtos(){
 		String sql = "select * from appealsdto";

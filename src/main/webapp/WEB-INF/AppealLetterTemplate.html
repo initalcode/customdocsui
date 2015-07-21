@@ -5,11 +5,17 @@
         <style type="text/css">
             .bodyBody {
                 margin: 10px;
-                font-size: 1.50em;
+                font-size: 1em;
             }
             .facilityHeader{
-                text-align: center;
+                text-align: left;
             }
+            li:before
+		{
+    content: "\2610";
+    margin-right:5px;
+		}
+
             .divHeader {
                 text-align: right;
                 border: 1px solid;
@@ -43,14 +49,14 @@
     </head>
     <body class="bodyBody">
         <div class="facilityHeader">
-            <h3>${facility.facilityName}</h3> <hr>
-            <h6>${facility.street}, ${facility.town}, ${facility.state} ${facility.zip} <br>
+            <h6>${facility.facilityName} <br>
+            ${facility.street}, ${facility.town}, ${facility.state} ${facility.zip} <br>
             Phone: ${facility.phone} Fax: ${facility.fax} </h6>
         </div>
         <div class="divInsuranceInfo">
-            ${insurance.name}<br/>
+           <h6> ${insurance.name}<br/>
             ATTN: ${insurance.dept}<br/>
-            ${insurance.street}, ${insurance.state} ${insurance.zip}
+            ${insurance.street}, ${insurance.state} ${insurance.zip} </h6>
         </div>
         <div class="newDate">
         <br/>

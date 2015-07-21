@@ -27,7 +27,7 @@ public class FreemarkerImpl {
 		
 		public FreemarkerImpl() throws IOException {
 			
-			config.setDirectoryForTemplateLoading(new File("G:/software-projects/customdocs/src/main/webapp/WEB-INF"));
+			config.setDirectoryForTemplateLoading(new File("G:/software-projects/Git Projects/customdocs/src/main/webapp/WEB-INF"));
 			config.setObjectWrapper(new DefaultObjectWrapper());
 			config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 			config.setDefaultEncoding("UTF-8");

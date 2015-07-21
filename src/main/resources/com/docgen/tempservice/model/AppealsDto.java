@@ -2,6 +2,7 @@ package com.docgen.tempservice.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -16,7 +17,9 @@ public class AppealsDto {
 	@Id
 	private String claimId;
 	private Date dateCreated;
+	@Column(length = 2000, columnDefinition = "TEXT")
 	private String parOne;
+	@Column(length = 2000, columnDefinition = "TEXT")
 	private String parTwo;
 	public long getPatientId() {
 		return patientId;

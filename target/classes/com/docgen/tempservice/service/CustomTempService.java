@@ -67,10 +67,20 @@ public class CustomTempService {
 	public List<AppealsDashboardDto> getOpenAppealsLetters(){
 		return appealsDashboardDao.getAppealsDashboard();
 	}
+	@GET
+	@Produces("application/json")
+	@Path("/editappealletter")
+	public AppealsDto editAppealLetter(@QueryParam("claimId") String id){
+		return appealsDao.getAppealsDtoforClaimId(id);
+	}
 	@POST
 	@Path("/appealsletter")
 	public void insertAppealsLetter(AppealsDto appealsDto) {
-		appealsDao.insertAppealsDetails(appealsDto);
+		if(appealsDao.letterExists(appealsDto.getClaimId())) {
+			appealsDao.updateAppealsDetails(appealsDto);
+		}else {
+			appealsDao.insertAppealsDetails(appealsDto);
+		}
 	}
 	@GET
 	@Path("/appealsletter")
