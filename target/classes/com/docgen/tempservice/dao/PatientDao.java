@@ -16,16 +16,18 @@ import com.docgen.tempservice.model.Patient;
 public class PatientDao extends JdbcDaoSupport{
 	
 	public void updatePatient(Patient patient){
-		String sql = "update patient set name = ?, insid = ?, dateofbirth = ?, accountid = ? where id=?";
-		this.getJdbcTemplate().update(sql, new Object[]{patient.getName(), patient.getInsId(), patient.getDateOfBirth(), patient.getAccountId(), patient.getId()});
+		String sql = "update patient set name = ?, insid = ?, dateofbirth = ?, accountid = ?, ptstreet = ?, pttown = ?, ptstate = ?, ptzip = ? where id=?";
+		this.getJdbcTemplate().update(sql, new Object[]{patient.getName(), patient.getInsId(), patient.getDateOfBirth(), patient.getAccountId(), 
+			 patient.getPtStreet(), patient.getPtTown(), patient.getPtState(), patient.getPtZip(), patient.getId()});
 	}
 	public void deletePatient(long id){
 		String sql = "delete from patient where id = ?";
 		this.getJdbcTemplate().update(sql, new Object[]{id});
 	}
 	public void insertPatient(Patient patient){
-		String sql = "insert into patient (accountid, name, insid, dateofbirth) values (?, ?, ?, ?)";
-		this.getJdbcTemplate().update(sql, new Object[]{patient.getAccountId(), patient.getName(), patient.getInsId(), patient.getDateOfBirth()});
+		String sql = "insert into patient (accountid, name, insid, dateofbirth, ptstreet, pttown, ptstate, ptzip) values (?, ?, ?, ?,?,?,?,?)";
+		this.getJdbcTemplate().update(sql, new Object[]{patient.getAccountId(), patient.getName(), patient.getInsId(), 
+				patient.getDateOfBirth(), patient.getPtStreet(), patient.getPtTown(), patient.getPtState(), patient.getPtZip()});
 	}
 	public List<Patient> getAllPatients(){
 		String sql = "select * from patient";
@@ -44,6 +46,10 @@ public class PatientDao extends JdbcDaoSupport{
 	        patient.setInsId(rs.getString("insid"));
 	        patient.setName(rs.getString("name"));
 	        patient.setDateOfBirth(rs.getDate("dateofbirth"));
+	        patient.setPtStreet(rs.getString("ptstreet"));
+	        patient.setPtTown(rs.getString("pttown"));
+	        patient.setPtState(rs.getString("ptstate"));
+	        patient.setPtZip(rs.getString("ptzip"));
 	        return patient;
 	    }
 	}

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <style type="text/css">
+            .bodyBody {
+                margin: 0px 10px 10px 10px;
+                font-size: 1.50em;
+            }
+            .facilityHeader{
+                text-align: left;
+            }
+            .divHeader {
+                text-align: right;
+                float: right;
+                font-size: 3em;
+                border-width: 1px;
+                width: 400px;
+                border-style: solid;
+               	color: red;
+            }
+            .divInsuranceInfo {
+                text-align: left;
+                float: left;
+                width: 1288px;
+
+            }
+            .newDate {
+                float: left;
+                text-align: left;
+                width: 1288px;
+            }
+            .divSubject {
+                clear: both;
+                font-weight: bold;
+                padding-top: 80px;
+            }
+            .referenceInfo{
+                float: left;
+                text-align: left;
+            }
+            .divAdios {
+                float: left;
+                padding-top: 50px;
+            }
+        </style>
+        <title>Collection Letter</title>
+    </head>
+    <body class="bodyBody">
+    	<div class="divHeader"> 
+    		<span>Final Notice!</span>
+    	</div>
+        <div class="facilityHeader">
+            <h4>${facility.facilityName} Collection Office <br>
+            ${facility.street} <br>
+            ${facility.town}, ${facility.state} ${facility.zip} <br>
+            Phone: ${facility.phone} <br>
+            Fax: ${facility.fax} </h4>
+        </div>
+        <div class="newDate">
+        <br/>
+           <br>
+
+        </div>
+     
+        <br>
+        <div class="referenceInfo">
+
+            ${patient.name} <br>
+            ${patient.ptStreet}<br>
+			${patient.ptTown}, ${patient.ptState} ${patient.ptZip} <br>
+        </div>
+        <div class="divSubject">
+            Dear ${patient.name},
+        </div>
+
+        <div class="divContents">
+            <p>
+                <br>
+              We are disappointed that we have not heard from you regarding your past due balance of <b>$${dto.payment}</b>. Your account is in serious jeopardy of being reassigned to an outside collection agency. In order to prevent your account from further action, please make payment within 10 days. We accept MasterCard, American Express, VISA and Discover. To make a payment, please call ${facility.facilityName} at ${facility.phone}.
+            </p>
+            <p>
+              If your payment is already on its way, we thank you and ask that you please disregard this notice. If not, we would appreciate receipt of your payment as soon as possible. If you are unable to make payment in full due to financial difficulties, a reasonable payment plan is available so you can satisfy your obligation and keep your account in good standing. If you would like to further discuss the details of your account, please do not hesitate to call us at our billing office 732-290-1014.
+           </p>
+            <br>
+        </div>
+
+        <div class="divAdios">
+            Sincerely, <br/>
+            
+                        <br/>
+                        <br/>
+            ${facility.facilityName} Collection Office<br/>
+            Biling Office Phone: 732-290-1014<br/>
+            Medical Office Phone: ${facility.phone} <br/>
+            Notice Date: ${dateCreated?date}
+        </div>
+    </body>
+</html>

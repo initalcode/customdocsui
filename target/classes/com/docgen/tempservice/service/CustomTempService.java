@@ -1,14 +1,19 @@
 package com.docgen.tempservice.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipOutputStream;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,6 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -24,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.docgen.tempservice.model.AppealsDashboardDto;
 import com.docgen.tempservice.model.AppealsDto;
+import com.docgen.tempservice.model.CollectionDashboardDto;
+import com.docgen.tempservice.model.CollectionDto;
 import com.docgen.tempservice.model.Doctor;
 import com.docgen.tempservice.model.DoctorDto;
 import com.docgen.tempservice.model.Facility;
@@ -45,6 +53,8 @@ public class CustomTempService {
 	com.docgen.tempservice.dao.AppealsDao appealsDao;
 	@Autowired
 	com.docgen.tempservice.dao.AppealsDashboardDao appealsDashboardDao;
+	@Autowired
+	com.docgen.tempservice.dao.CollectionDao collectionDao;
 	
 	@POST
 	@Path("/editpatient")
@@ -82,6 +92,101 @@ public class CustomTempService {
 			appealsDao.insertAppealsDetails(appealsDto);
 		}
 	}
+	@POST
+	@Path("/collectionletter")
+	@Produces("text/plain")
+	public String insertCollectionLetter(CollectionDto dto){
+		if(collectionDao.letterExists(dto.getCollectionId())){
+			collectionDao.updateCollectionLetter(dto);
+			
+			return String.valueOf(dto.getCollectionId());
+		}else {
+			long temp = collectionDao.addCollectionLetter(dto);
+			return String.valueOf(temp);
+		}
+	}
+	@GET
+	@Produces("application/json")
+	@Path("/collectionletter")
+	public List<CollectionDashboardDto> getCollectionLetters(){
+		return collectionDao.getCollectionLetters();
+	}
+	@DELETE
+	@Path("/collectionletter")
+	public void deleteCollectionLetter(@QueryParam("collectionId") long id){
+		collectionDao.removeCollectionLetter(id);
+	}
+	@POST
+	@Produces("application/zip")
+	@Path("/collectionbatch")
+	public Response genCollectionBatch(List<CollectionDashboardDto> collectionList, @Context HttpServletRequest request){
+		File zipFile = new File("g:/software-projects/temp.zip");
+		
+		try(ZipOutputStream zipStream = new ZipOutputStream(new FileOutputStream(zipFile))){
+			String nameOfFile = "collection.html";
+			int number = 0;
+		for(CollectionDashboardDto dashdto : collectionList){
+			Date date = new Date();
+			dashdto.setDateCreated(date);
+			collectionDao.updateLetterType(dashdto);
+			CollectionDto dto = collectionDao.getCollectionLetter(dashdto.getCollectionId());
+			Patient currentPatient = patientDao.getPatientForId(dto.getPatientId());
+			Facility currentFacility = providerDao.getFacilityForId(dto.getFacilityId());
+			
+			Map<String, Object> data = new HashMap();
+			data.put("patient", currentPatient);
+			data.put("facility", currentFacility);
+			data.put("dateCreated", dto.getDateCreated());
+			data.put("dto", dto);
+			if(dto.getLetterType().equals("LetterOne")){
+				File returnFile = fi.process("collectiontemplateone.html", data, nameOfFile);
+				ZipService.addToZipFile(returnFile, zipStream);
+			} else {
+				File returnFile = fi.process("collectiontemplate.html", data, nameOfFile);
+				ZipService.addToZipFile(returnFile, zipStream);
+			}
+			nameOfFile = "collection" + (number++) + ".html";
+		}
+		zipStream.close();
+		}catch(IOException e) {
+			System.out.println(e.toString());
+		}catch(TemplateException e) {
+			System.out.println(e.toString());
+		}
+		ResponseBuilder resp = Response.ok((Object) zipFile);
+		resp.header("Content-Type", "application/zip");
+		resp.header("Content-Disposition", "attachment; filename=\"" + "collectionLetters.zip" + "\"");
+		return resp.build();
+	}
+	@GET
+	@Path("/gencollectionletter")
+	@Produces("application/-stream")
+	public Response genCollectionLetter(@QueryParam("collectionId") long collectionId) throws TemplateException{
+		CollectionDto dto = collectionDao.getCollectionLetter(collectionId);
+		
+		Patient currentPatient = patientDao.getPatientForId(dto.getPatientId());
+		Facility currentFacility = providerDao.getFacilityForId(dto.getFacilityId());
+		
+		Map<String, Object> data = new HashMap();
+		data.put("patient", currentPatient);
+		data.put("facility", currentFacility);
+		data.put("dateCreated", dto.getDateCreated());
+		data.put("dto", dto);
+		if(dto.getLetterType().equals("LetterOne")){
+			File returnFile = fi.process("collectiontemplateone.html", data, "collection.html");
+			ResponseBuilder resp = Response.ok((Object) returnFile);
+			resp.header("Content-Type", "application/octet-stream");
+			resp.header("Content-Disposition", "attachment; filename=\"" + "collectionLetterOne" + "\"");
+			return resp.build();
+		} else {
+		File returnFile = fi.process("collectiontemplate.html", data, "collection.html");
+		ResponseBuilder resp = Response.ok((Object) returnFile);
+		resp.header("Content-Type", "application/octet-stream");
+		resp.header("Content-Disposition", "attachment; filename=\"" + "collectionLetterTwo" + "\"");
+		return resp.build();
+		}
+		
+	}
 	@GET
 	@Path("/appealsletter")
 	@Produces("application/octet-stream")
@@ -104,7 +209,7 @@ public class CustomTempService {
 		data.put("parOne", appealsDto.getParOne());
 		data.put("parTwo", appealsDto.getParTwo());
 	
-		File returnFile = fi.process("AppealLetterTemplate.html", data);
+		File returnFile = fi.process("AppealLetterTemplate.html", data, "appeal.html");
 		ResponseBuilder resp = Response.ok((Object) returnFile);
 		resp.header("Content-Type", "application/octet-stream");
 		resp.header("Content-Disposition", "attachment; filename=\"" + "appealsLetter" + "\"");

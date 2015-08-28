@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <style type="text/css">
+            .bodyBody {
+                margin: 0px 10px 10px 10px;
+                font-size: 1.50em;
+            }
+            .facilityHeader{
+                text-align: left;
+            }
+            .divHeader {
+                text-align: center;
+                float: right;
+                font-size: 3em;
+                border-width: 1px;
+                width: 400px;
+                border-style: solid;
+               	color: red;
+            }
+            .divInsuranceInfo {
+                text-align: left;
+                float: left;
+                width: 1288px;
+
+            }
+            .newDate {
+                float: left;
+                text-align: left;
+                width: 1288px;
+            }
+            .divSubject {
+                clear: both;
+                font-weight: bold;
+                padding-top: 80px;
+            }
+            .referenceInfo{
+                float: left;
+                text-align: left;
+            }
+            .divAdios {
+                float: left;
+                padding-top: 50px;
+            }
+        </style>
+        <title>Collection Letter</title>
+    </head>
+    <body class="bodyBody">
+    <div class="divHeader"> 
+    		<span>Collection Notice!</span>
+    	</div>
+        <div class="facilityHeader">
+            <h4>${facility.facilityName} Collection Office <br>
+            ${facility.street} <br>
+            ${facility.town}, ${facility.state} ${facility.zip} <br>
+            Phone: ${facility.phone} <br>
+            Fax: ${facility.fax} </h4>
+        </div>
+        <div class="newDate">
+        <br/>
+           <br>
+
+        </div>
+     
+        <br>
+        <div class="referenceInfo">
+
+            ${patient.name} <br>
+            ${patient.ptStreet}<br>
+			${patient.ptTown}, ${patient.ptState} ${patient.ptZip} <br>
+        </div>
+        <div class="divSubject">
+            Dear ${patient.name},
+        </div>
+
+        <div class="divContents">
+            <p>
+                <br>
+              Your account is seriously past due with a balance of <b>$${dto.payment}</b>. Please remit payment in full for the past due balance within the next 15 days. To make a payment call on 732-636-5252. We accept MasterCard, VISA and Discover and AMEX.
+              </p>
+            <p>
+            If your payment is not received, your account will be referred to an outside collection agency. If your payment is already on its way, we thank you and ask that you please disregard this notice. If not, we would appreciate receipt of your payment as soon as possible. If you cannot make payment in full and would like to make payment arrangements or if you would like to further discuss the details of your account, please do not hesitate to call patient billing at (732) 290 1014 from 9.00AM to 5.00PM. Please find attached detailed invoice for your reference.
+              </p>
+            <br>
+        </div>
+
+        <div class="divAdios">
+            Sincerely, <br/>
+            
+                        <br/>
+                        <br/>
+            ${facility.facilityName} Collection Office<br/>
+            Biling Office Phone: 732-290-1014<br/>
+            Medical Office Phone: ${facility.phone} <br/>
+            Notice Date: ${dateCreated?date}
+        </div>
+    </body>
+</html>

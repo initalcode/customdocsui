@@ -43,6 +43,9 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 	<bean id="appealsDashboardDao" class="com.docgen.tempservice.dao.AppealsDashboardDao">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+	<bean id="collectionDao" class="com.docgen.tempservice.dao.CollectionDao">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
 <!-- 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"> -->
 <!--     <property name="templateLoaderPath" value="webapp/WEB-INF/"/> -->
 <!-- 	</bean> -->

@@ -34,11 +34,11 @@ public class FreemarkerImpl {
 			config.setIncompatibleImprovements(new Version(2,3,20));
 		}
 	
-		public File process(String templateName, Object data) throws TemplateException{
+		public File process(String templateName, Object data, String nameOfFile) throws TemplateException{
 			
 			try {
 				Template template = config.getTemplate(templateName);
-				File file = new File("appealsLetter.html");
+				File file = new File(nameOfFile);
 				Writer fileWriter = new FileWriter (file);
 				template.process(data, fileWriter);
 				fileWriter.close();
